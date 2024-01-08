@@ -1,0 +1,123 @@
+Spring Framework:-
+        Advantages of this framework are - provides with logging , security, dependency injection, scheduling, batch processing and more.
+
+Features:-
+
+(i) Inversion of Control (IoC)
+        Control given to the framework itself to take over the process of managing instances while we the developer can rely on business logic.
+This process is possible through dependency injection.
+
+(ii) Dependency Injection (DI)
+        Allowing the classes to use objects of other classes in necessity. This way , the developer doesn't maintain the dependencies to be
+suspended for using entities of classes.
+
+(iii) Aspect Oriented Programming (AOP)
+        Increases modularity by allowing the separation of cross-cutting(redundant job to be done) concerns.
+
+(iv) Spring MVC
+        For creating the web applications in Model-View-Controller template.
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+							Dependency Injection:-
+
+
+    *Loose coupling helps in unit testing of modules which develops a code with multiple individual sections.
+
+    *Dependency Injection helps in annotating these modules to provide Inversion of Control to the spring framework.
+
+    *"pom.xml"(if Maven) consists all the dependencies that are available for the project. New dependencies can also be added to the same.
+
+    *All the Beans(modules) are stored in @Container.
+
+    *Interfaces available - Bean factory and Application Context.
+
+    *Application context extends Bean Factory.
+    
+    *Use an instance of ApplicationContext for ClassPathXml that pulls the beans from the .xml main.resources
+    
+    (XML- Based)
+    ------------
+    *In .xml file define <Beans> from the official website and then start adding <Beans id="" class="">
+    
+    *Every bean must have its id for reference and class variable to the actual class to be made a bean.
+    
+    *The default values to be used for class variables can be injected through <properties> under <bean>
+    
+    *To inject the class.object within a class, you can use the ref="id" of the bean class to be injected as an object.
+    
+    *We can also inject the properties through the <constructor-arg> based injection for a class.
+    
+    (Annotations - based)
+    ---------------------
+    *use @Component above the class that you want to make a Bean.
+    
+    *Searching a bean : <context:component-scan base-package=""> provide with the package in which the component must be searched under 	<Beans>.
+    
+    (Java- Based)
+    ---------------
+    *Create a class for bean configurations, (say, "BeanConfig").
+    
+    *Annotate the class with @Configuration
+    
+    *Annotate with @ComponentScan(basePackage ="") to specify the location look for the component within the package.
+    
+    *For our own beanconfiguration we must instantiate the AnnotationConficApplicationContext(.class) from ApplicationContext.
+    
+    
+Scope of Beans:
+---------------
+
+@Scope(scopename="<scope_name_here>")
+@Component
+
+->Singleton -*By default the Bean created are Singleton scope - only one instance can be craeted. 
+->prototype -*Can have multiple instances of the Bean.
+->Request   -*Scopes a bean defined to HTTP request. ('Web-aware' SpringAplicationContext)
+->Session   -*Scopes a bean defined to HTTP session. ('Web-aware' SpringAplicationContext)
+->Global-Session     -*Scopes a bean defined to a global HTTP session.
+
+
+SingleTon - Only one object is created and the others are referenced to the same object (Shared properties).
+
+Prototype - To get new object for every time we use the bean. 
+
+Lifecycle of a bean
+--------------------
+
+1.Definition. - The configuration of a bean to be created
+
+2.Instantiatiton. - Initiate an instance of the bean.
+
+3.Population. - Define the properties of the bean that are explicitly defined by user.
+
+4.Post initialization. - Interfaces are executed with their implemented classes to be determined on runtime(DMD).
+
+5.Availability. - All the beans are successfully injected and are ready to be used from container.
+
+6.Pre-destroy. -Defining the disconnectivity of a bean while cleaning up stuff(Manual cleanup).
+
+7.Destruction. - Bean destroyed from the JVM itself. 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    	
