@@ -97,8 +97,49 @@ Lifecycle of a bean
 
 6.Pre-destroy. -Defining the disconnectivity of a bean while cleaning up stuff(Manual cleanup).
 
-7.Destruction. - Bean destroyed from the JVM itself. 
-    
+7.Destruction. - Bean destroyed from the JVM itself.
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+						
+						Aspect Oriented Programming(AOP):- 
+						
+	*A methodology to create applications.
+	
+	*Helps in removing the cross-cutting concers(Authentication, Authorizarion, Tokenization, etc.) from the business logic.
+	
+	*Dependencies needed are aspectjRuntime and aspectjWeaver
+	
+For instance, consider a checkout() function for a Shopping cart. This checkout method is implementing the business logic for the specified method. Considering the funcionalities that are run parallel- Logging, Authentication and Authorisation, Sanitizing the data can be some of the aspects to be done before checkout. 
+	
+	*All these aspects must be annotated as @Aspects for their seperation.(@Component to be under spring radar)
+	
+	*Any method from aspect that a system looks for is a @Pointcut.
+	
+	*A @Pointcut tells where to add the aspect in order to minimize cross-cutting implementations.(What is called)
+	
+	*A @JoinPoint is the location where the Aspect must be used.(Where is it called)
+	
+	*@Before("execution(* <location.class.method()>)") in aspect method defines when to run logging() before checkout(method) .
+	
+	*@After("execution(* <location.class.method()>)") in aspect method defines when to run logging() after checkout(method) .
+	
+	*@EnableAspectJAutoProxy to enable the Aspects to be implemented.
+	
+	**Note:- If the checkout method accepts any arguements, specify (..) in @Bean("execution(* <location.class.method(..)>)"
+	
+	*@Pointcut("within("<location>")") creates a pointcut that can be used.
+	
+	*@Before("authenticationPointCut() && authorizationPointCut()") to implement the @Aspects before a method.
+	
+Working with the data from the class method can be very much specific in working with the requests. We know that to accept for arguements or null we use (..) in @Bean("execution(* <location.class.method(..)>).
+
+	*To access the properties for arguements passed from checkOut() method in @Aspect methods, use 
+	 public void method(JoinPoint <arg_name>).
+	 
+	* "<arg_name>." will get you many properties out of which we used signature in our example.
+	
+	s
+	
     
     
     
