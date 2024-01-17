@@ -68,8 +68,8 @@ suspended for using entities of classes.
 Scope of Beans:
 ---------------
 
-@Scope(scopename="<scope_name_here>")
 @Component
+@Scope(scopename="<scope_name_here>")
 
 ->Singleton -*By default the Bean created are Singleton scope - only one instance can be craeted. 
 ->prototype -*Can have multiple instances of the Bean.
@@ -138,7 +138,7 @@ Working with the data from the class method can be very much specific in working
 	 
 	* "<arg_name>." will get you many properties out of which we used signature in our example.
 	
-	s
+	
 	
     
     

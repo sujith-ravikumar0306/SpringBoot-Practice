@@ -1,0 +1,226 @@
+SpringBoot:-
+-----------
+
+It is an extension of Spring framework that relies more on convention than configuration.
+
+->Create stand-alone Spring applications
+->Embed Tomcat, Jetty or Undertow directly (no need to deploy WAR files)
+->Provide opinionated 'starter' dependencies to simplify your build configuration
+->Automatically configure Spring and 3rd party libraries whenever possible
+->Provide production-ready features such as metrics, health checks, and externalized configuration
+->Absolutely no code generation and no requirement for XML configuration
+
+
+Dependency Injection(DI):- As seen in SpringIntro, DI plays a vital role in reducing the overhead in creation of objects for thousands of 				classes used in an application(with help of Inversion of Control).
+
+Inversion of Control(IoC):-Handing over the responsibility of creating objects to the spring framework itself
+				( through Dependency Injection).
+				
+---------------------
+Spring initializer:- 
+---------------------
+	A tool to create bare minimum (back bone) application ,ready to deploy.(start.spring.io)
+
+	*pom.xml - Consists all the dependencies needed for the project.
+	
+	*The main Application.java annotates @SpringBootApplication class that has @SpringBootConfiguration, @EnableAutoConfiguration, 		@Componentsacn.
+	
+SpringBoot allow us to configure the application the way we want with the help of Application.properties inside package-resources.
+The default port ghiven to run application by the Tomcat server is 8080. Let us configure thr port that we want out server to run. 
+Set server.port = PORT_NUMBER.
+	
+	*"mvn spring-boot:run" cmd to start the server using terminal.
+
+
+------------------
+Creating an api:-
+-----------------
+
+	*Create a package controller and a class controller in it.
+	
+	*Annotate the class with @RestController to specify that it contains @ResponseBody -> @Controller -> @Component
+	
+	*@RequestMapping(value="/<path>" , method = "<Method>") should be use to create REST endpoints, just above the method inside a 			restcontroller.
+	
+-------------------------------
+Dependency-"Spring DevTools" :- 
+-------------------------------
+	Restarts server whenever a change is made.
+		*Ctrl+Shift+a -> search registry -> enable "compiler.automake.allow.parallel".
+		*File -> Settings ->Build,Execution,Deployment -> Compiler -> Enable "Build project automatically".
+		
+----------------------------------------------------------------------------------------------------------------------------------------
+							Architecture:-
+----------------------------------------------------------------------------------------------------------------------------------------
+
+     	       ---------------------------------
+ *layer 1:     REST API: GET, PUT, POST, DELETE
+ 	       ---------------------------------
+	      			|
+	      			v
+	       ---------------------------------
+ *layer 2:       Service Layer:Business logic	 	
+	       ---------------------------------
+	        		|
+	        		v
+	       ---------------------------------
+ *layer 3:	 Data access/Repository Layer:
+ 		    Handling interactions 		-(Dependency: Spring Data JPA)
+ 		       with database
+	       ---------------------------------
+	       		|
+	       		v
+	       =================================
+	       |	    DATABASE		 |
+	       =================================
+
+
+Database connectivity:-
+
+	*spring.h2.console.enabled = true			-(Enabling web console)
+	*spring.datasource.url = jdbc:h2:mem:myapp		-(JDBC URL (myapp-database name))
+	*spring.datasource.username = myapp			-(Database-Username)
+	*spring.datasource.password = password		-(Database -Password)
+	*spring.jpa.database-platform = org.hibernate.dialect.H2Dialect	-(dialect to specify the type of database used)
+
+Creating components:-
+
+Create the packages for Entity, Repository, Services and Controller.
+
+	->Entity : *Create a class that you need to be the entity and annotate the class with @Entity.
+		   *Specify @Id above data members to make them primary key field.
+	
+	->Controller : *Create a controller class and annotate it with @RestController
+	
+	->Services : *Create an interface and then implement in service-classes because one service can have multiple implementations.
+		     *Annotate the class with @Service
+	
+	->Repository: *Create an interface and then implement in repository-classes because one repository can have multiple 				implementations.
+		      *Annotate the interface with @Repository
+		      *We will not create any concrete implementation class, rather we will extend jpa reposirory itsef.
+		      *Jpa repo gives various methods that can be directly used for interaction of entity with database.
+		      *"interface exampleRepository extends JpaRepositoty<(Entity),(Type of primary key)>{}
+
+Save API:-
+	
+Let us write a method inside EntityController to save the entity in database.
+	
+	*@PostMapping("/<Path>") public <entity_type> method_name(@RequestBody <entity_type> obj_name)
+		->@PostMapping		- create a post request
+		-><entity_type>	- The entity class name
+		->@RequestBody		- Converts the json object passed to our entity type.
+		
+	*Now, we must call the service layer to pass the data(entity) -> Do business logic(service) ->Save the data(repository)
+	
+	*Firstly, to call service layer inject dependency "@Autowired private <EntityService> <entityService>" to allow creating 		 instances by spring framework by inversion of control.
+	
+	*Now, @PostMapping is done for "saveDept(Department department)" - (in our example) for returning deptService.saveDept(Dept dept)
+	
+	*Create the methods saveDept() in Service by @Autowired deptRepository. 
+
+
+Writing our own queries:-
+	
+	*The queries that we use in Repository interface may assist only simple queries.
+	
+	*To use our own queries we can annotate the method with the @Query annotation — its value attribute contains the JPQL or SQL to 		 execute. 
+	 e.g :- @Query("SELECT u FROM User u WHERE u.status = 1")
+		 Collection<User> findAllActiveUsers();
+			  
+	*We can use also native SQL to define our query. All we have to do is set the value of the nativeQuery attribute to true and 		 define the native SQL query in the value attribute of the annotation.
+	 e.g :- @Query(
+		  value = "SELECT * FROM USERS u WHERE u.status = 1", 
+		  nativeQuery = true)
+	          Collection<User> findAllActiveUsersNative();
+	 
+
+Hybernate Validation:-
+	
+	*Hybernate Validation helps in field-level bean validation that can specifiy constrains in the context of null/ not null,
+	 empty/ not empty , min/max , valid email, etc.
+	 
+	*Add the <spring boot starter validation> dependency in pom.xml file.
+	
+	*For instance, @NotBlank(message = "<yout message here>") can be used in a field that must not be blank while data is fed.
+	
+	*The method that accepts data from controller must define <method(@Valid)> in order to validate the constraints that are 		 specified.
+	
+	*Many validation annotations are available (refer official documentation).
+	
+	
+Adding loggers:-
+
+	*An event log is a centralized way for applications and the operating system to record important software and hardware events.
+	
+	*In Spring Boot, logging is a crucial aspect of application development that allows developers to trace errors and record 		 critical failures during the application’s run. 
+	
+	*Spring Boot uses a common logging framework and leaves the log implementation open, providing flexibility to the developers. 
+	
+	*In DepartmentController use <private final Logger logger = LoggerFactory.getLogger(DepartmentController.class);> creates a 	  logger from "org.slf4j" package.
+	
+	*Add ~logger.info("<message>")~ to add logs within methods.
+	
+	*The logs are returned in the terminal with the details of thread, class along with the specified log message.
+	
+	*We can also configure the aggregation of logs such as in console, save in a file or creating rolling policies.
+	
+	
+Project Lombok :-
+
+	*Project Lombok is a java library tool that is used to minimize/remove the boilerplate code and save the precious time of 		 developers during development by just using some annotations. 
+	
+	*It improves the readability of the code by taking care of getters, setters, default constructor, toString() and much more.
+	
+	*Add the "Lombak" plugin and dependency.
+	
+	*In Settings -> Plugins -> Install "Lombak" -> Apply
+	
+	*Annotate the entity class with @Data to get rid of boilerplate code.
+	
+	*@Getter, @Setter, @ToString are some of specific annotations from Lombak that can be extended as @Data of Lombak.class.
+	
+
+Exception handling:-
+
+	*Error messages that are passed to the frontend (UI) can be exceptionally handled to get rid of default techinical logs.
+	
+	*Create package-errors and a class DepartmentNotFoundException extending the Exception.class and specify constructors.
+	
+	*Throw new exception in the method under serviceImplemenattion(block to catch error).
+	
+	*Add the exception to method signature and modify it over the hierarchy.
+	
+	*To handle the REST response entity, let us create another handler-class extending ResponseEntityExceptionHandler inside 		 Error-package.
+	
+	*The class used for handling exception must be annotated with @ControllerAdvice and @ResponseStatus.
+	
+	*Create an entity class - ErrorMessage with HttpStatus and message data members.
+	
+	*Create a method in messageHandler that returns the entity above which takes (DepartmentNotFoundException, WebRequest) as two 		 parameters.
+	
+	*Annotate the method with @ExceptionHandler(DepartmentNotFoundException.class).
+	   Eg:-{ ErrorMessage errorMessage =new ErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
+        	 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage); }
+
+
+						Database switch from H2 to Postgres
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
