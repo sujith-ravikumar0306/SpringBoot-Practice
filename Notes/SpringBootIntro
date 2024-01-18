@@ -203,8 +203,48 @@ Exception handling:-
         	 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage); }
 
 
-						Database switch from H2 to Postgres
+Database switch from H2 to Postgres:-
+-------------------------------------
+
+	*Install the postgres driver dependency in pom.xml
 	
+	*Configure the database in Application.properties.
+
+
+Unit Testing:-
+
+	*Testing each and every component(Endpoints in our case) of an application to look for flaws.
+	
+	*Mocking: the initialization of mock objects instead of external class-objects within a class in unit testing.
+
+
+Adding config in Properties:-
+
+	*Add any kind of properties with key-value pair{ dot(.) seperated} context.
+		e.g:- welcome.message = Welcome to home page
+		
+	*Annotate the instance created with "@Value("${welcome.message}") private String welcomeMessage".
+	
+
+Adding Application.yaml file:-
+	
+	*It is also a configurable file that is in most human readable form and is widely used across developers.
+	
+	*It also doesn't allow redundancy of key-value pair names used.
+	
+
+SpringBoot Profiles:-
+
+	*We may work on different databases and need to configure the properties for each and every database.
+	
+	*At this time of configuration, we can use profiles: <name> to create various profiles with similar properties.
+	
+	*Spring: Profile : Active:<name> will use the properties of <name> profile by default.
+
+
+SpringBoot Actuators:-
+
+	*Helps in measuring health and various metrics of application in production environment.
 
 
 
